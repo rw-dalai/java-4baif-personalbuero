@@ -29,17 +29,17 @@ class MitarbeiterTest {
     @Test
     public void berechneDienstalter_shouldReturn_CorrectSum() {
 
-        // Given
-        Year eintritt = Year.of(2020);
-        Year akt = Year.of(2024);
-        mitarbeiter.setEintrJahr(eintritt);
+        // GIVEN
+        Year eintrittsJahr = Year.of(2020);
+        Year aktJahr = Year.of(2024);
+        mitarbeiter.setEintrJahr(eintrittsJahr);
 
-        // When
-        int actualDienstalter = mitarbeiter.berechneDienstalter(akt);
+        // WHEN
+        int actualDienstalter = mitarbeiter.berechneDienstalter(aktJahr);
 
-        // Then
+        // THEN
         // expected vs actual
-        int expectedDienstalter = akt.getValue() - eintritt.getValue();
+        int expectedDienstalter = aktJahr.getValue() - eintrittsJahr.getValue();
         assertEquals(expectedDienstalter, actualDienstalter);
     }
 }

@@ -11,7 +11,7 @@ import java.time.Year;
 // stellt die natürliche (natural order) der Mitarbeiter her.
 // zB M2("Ana"), M1("Rene"), M3("Wilhelm")
 
-public abstract class Mitarbeiter implements Comparable<Mitarbeiter> {
+public abstract class Mitarbeiter {
 
     private String name;
 

@@ -20,13 +20,12 @@ public class ManagerTest {
     @Test
     public void berechneGehalt_shouldReturn_CorrectValue() {
 
-        // Given
-
-        // When
+        // WHEN
         double actualGehalt = manager.berechneGehalt();
 
-        // Then
+        // THEN
         // expected vs actual
-        assertEquals(manager.getFixum(), actualGehalt);
+        double expectedGehalt = manager.getFixum();
+        assertEquals(expectedGehalt, actualGehalt);
     }
 }
