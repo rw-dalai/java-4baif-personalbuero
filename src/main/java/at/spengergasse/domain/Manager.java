@@ -1,4 +1,4 @@
-package at.spengergasse;
+package at.spengergasse.domain;
 
 import java.time.Year;
 
@@ -8,13 +8,13 @@ public class Manager extends Mitarbeiter {
 
     // ctor -------------------------------
     // zum Testen
-    public Manager() {
+    public Manager() throws MitarbeiterException {
+        // super();
         setFixum(1000);
     }
 
     // zum Verwenden
-
-    public Manager(String name, Year gebJahr, Year entrJahr, char geschlecht, double fixum) {
+    public Manager(String name, Year gebJahr, Year entrJahr, char geschlecht, double fixum) throws MitarbeiterException {
         super(name, gebJahr, entrJahr, geschlecht);
         setFixum(fixum);
     }
@@ -25,14 +25,15 @@ public class Manager extends Mitarbeiter {
     }
 
     // setter -------------------------------
-    public void setFixum(double fixum) {
+    public void setFixum(double fixum) throws MitarbeiterException {
         if (fixum >= 0) {
             this.fixum = fixum;
         } else {
-            System.out.println("Fehler: Ungültiges Fixum");
+            throw new MitarbeiterException("Fehler: Ungültiges Fixum");
         }
     }
 
+    // methods ------------------------------
     @Override
     public double berechneGehalt() {
         return fixum;

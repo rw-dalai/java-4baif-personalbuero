@@ -1,22 +1,23 @@
-package at.spengergasse;
+package at.spengergasse.domain;
 
 import java.time.Year;
 
-
-// Natürliche Ordnung
+// Natural Ordering of Numbers:
 // 0, 1, 2, 3, 4
+
+// Natural Ordering of Letters:
 // "a" "b" "c"
 
-// Comparable<Mitarbeiter> interface
-// stellt die natürliche (natural order) der Mitarbeiter her.
-// zB M2("Ana"), M1("Rene"), M3("Wilhelm")
+// Natural Ordering with the Comparable Interface
+// The Comparable interface is used to impose a natural ordering on the objects of the class that implements it.
 
-public abstract class Mitarbeiter {
+public abstract class Mitarbeiter implements Comparable<Mitarbeiter> {
 
     private String name;
 
-    private Year gebJahr; // 2000
-    private Year eintrJahr; // 2018, 2025
+    private Year gebJahr; // max 100 years
+
+    private Year eintrJahr; // min 18 years, max
 
     private char geschlecht;
 
@@ -24,7 +25,8 @@ public abstract class Mitarbeiter {
     // ctor -------------------------------
 
     // zum Testen
-    public Mitarbeiter() {
+    // The constructor throws an exception to the caller
+    public Mitarbeiter() throws MitarbeiterException {
         setName("Ana");
         setGebJahr(Year.of(2001));
         setEintrJahr(Year.now());
@@ -32,7 +34,8 @@ public abstract class Mitarbeiter {
     }
 
     // zum Verwenden
-    public Mitarbeiter(String name, Year gebJahr, Year entrJahr, char geschlecht) {
+    // The constructor throws an exception to the caller
+    public Mitarbeiter(String name, Year gebJahr, Year entrJahr, char geschlecht) throws MitarbeiterException {
         setName(name);
         setGebJahr(gebJahr);
         setEintrJahr(entrJahr);
@@ -58,54 +61,55 @@ public abstract class Mitarbeiter {
 
 
     // setter ------------------------------
-    public void setName(String name) {
+    // The setters throw an exception to the caller
+    public void setName(String name) throws MitarbeiterException {
         if (name != null) {
             if (name.length() >= 2) {
                 this.name = name;
             } else {
-                System.out.println("Fehler: Falscher Name");
+                throw new MitarbeiterException("Falscher Name");
+                // System.out.println("Fehler: Falscher Name");
             }
         } else {
-            System.out.println("Fehler: Name null");
+            throw new MitarbeiterException("Name null");
+            // System.out.println("Fehler: Name null");
         }
     }
 
-    public void setGebJahr(Year gebJahr) {
+    public void setGebJahr(Year gebJahr) throws MitarbeiterException {
         Year aktYear = Year.now();
 
         if (gebJahr != null) {
-            if (
-                    gebJahr.isAfter(aktYear.minusYears(100)) &&
-                            !gebJahr.isAfter(aktYear)
+            if (gebJahr.isAfter(aktYear.minusYears(100)) && !gebJahr.isAfter(aktYear)
             ) {
                 this.gebJahr = gebJahr;
             } else {
-                System.out.println("Fehler: Gebjahr ungültig");
+                throw new MitarbeiterException("Gebjahr ungültig");
             }
         } else {
-            System.out.println("Fehler: GebJahr null");
+            throw new MitarbeiterException("GebJahr null");
         }
     }
 
-    public void setEintrJahr(Year eintrJahr) {
+    public void setEintrJahr(Year eintrJahr) throws MitarbeiterException {
         Year aktYear = Year.now();
 
         if (eintrJahr != null) {
             if (berechneAlter() >= 18 && !eintrJahr.isAfter(aktYear)) {
                 this.eintrJahr = eintrJahr;
             } else {
-                System.out.println("Fehler: Eintritts ungültig");
+                throw new MitarbeiterException("EintrJahr ungültig");
             }
         } else {
-            System.out.println("Fehler: Eintrittsjahr null");
+            throw new MitarbeiterException("EintrJahr null");
         }
     }
 
-    public void setGeschlecht(char geschlecht) {
+    public void setGeschlecht(char geschlecht) throws MitarbeiterException {
         if (geschlecht == 'w' || geschlecht == 'm') {
             this.geschlecht = geschlecht;
         } else {
-            System.out.println("Fehler: Geschlecht ungültig");
+            throw new MitarbeiterException("Geschlecht ungültig");
         }
     }
 
@@ -131,27 +135,27 @@ public abstract class Mitarbeiter {
     public abstract double berechneGehalt();
 
     // 15 Jahre Betriebszugehörigkeit -> 1 Monat
-    public double berechnePraemie(Year year) {
-        if (year == null) {
-            year = Year.now();
-        }
-
-        int betriebz = berechneDienstalter(year);
-
-        if (betriebz == 15) {
-            return berechneGehalt();
-        } else if (betriebz == 25) {
-            return berechneGehalt() * 2;
-        } else if (betriebz == 35) {
-            return berechneGehalt() * 3;
-        } else if (betriebz == 40) {
-            return berechneGehalt() * 4;
-        } else if (betriebz == 50) {
-            return berechneGehalt() * 6;
-        } else {
-            return 0;
-        }
-    }
+//    public double berechnePraemie(Year year) {
+//        if (year == null) {
+//            year = Year.now();
+//        }
+//
+//        int betriebz = berechneDienstalter(year);
+//
+//        if (betriebz == 15) {
+//            return berechneGehalt();
+//        } else if (betriebz == 25) {
+//            return berechneGehalt() * 2;
+//        } else if (betriebz == 35) {
+//            return berechneGehalt() * 3;
+//        } else if (betriebz == 40) {
+//            return berechneGehalt() * 4;
+//        } else if (betriebz == 50) {
+//            return berechneGehalt() * 6;
+//        } else {
+//            return 0;
+//        }
+//    }
 
     public double berechnePraemieV2(Year year) {
         if (year == null) {
@@ -179,4 +183,20 @@ public abstract class Mitarbeiter {
         // %s string | %d int,long | %c character | %.2f float,double auf 2 Nachkommastellen
 //         return String.format("$s - %s - %c € %.2f", getClass().getSimpleName(), name, geschlecht, berechneGehalt());
     }
+
+
+    // compareTo -----------------------------
+
+    // We have to implement the `compareTo` method from the `Comparable` Interface.
+    // The `compareTo` method has to return 3 values:
+
+    //  <0  Ich (this) bin kleiner bin als der andere
+    // == 0 Ich (this) bin gleich als der andere bin
+    //  > 0 Ich (this) bin größer bin als der andere
+    @Override
+    public int compareTo(Mitarbeiter otherMitarbeiter) {
+        // "string".compareTo(), Integer.compare(), Double.compare()
+        return Double.compare(this.berechneGehalt(), otherMitarbeiter.berechneGehalt());
+    }
+
 }
