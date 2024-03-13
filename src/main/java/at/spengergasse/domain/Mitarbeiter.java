@@ -157,7 +157,7 @@ public abstract class Mitarbeiter implements Comparable<Mitarbeiter> {
 //        }
 //    }
 
-    public double berechnePraemieV2(Year year) {
+    public double berechnePraemie(Year year) {
         if (year == null) {
             year = Year.now();
         }

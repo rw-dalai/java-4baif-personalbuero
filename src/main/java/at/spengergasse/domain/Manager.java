@@ -9,7 +9,7 @@ public class Manager extends Mitarbeiter {
     // ctor -------------------------------
     // zum Testen
     public Manager() throws MitarbeiterException {
-        // super();
+        super();
         setFixum(1000);
     }
 
